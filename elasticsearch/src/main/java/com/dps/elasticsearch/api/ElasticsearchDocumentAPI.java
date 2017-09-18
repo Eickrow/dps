@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class ElasticsearchAPI {
+public class ElasticsearchDocumentAPI {
     @Resource(name = "transportClient")
     private TransportClient transportClient;
 

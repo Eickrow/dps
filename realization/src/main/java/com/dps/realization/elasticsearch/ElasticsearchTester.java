@@ -1,26 +1,22 @@
 package com.dps.realization.elasticsearch;
 
-import com.dps.elasticsearch.api.ElasticsearchAPI;
+import com.dps.elasticsearch.api.ElasticsearchDocumentAPI;
 import com.dps.elasticsearch.bean.Elasticsearch;
-import org.elasticsearch.action.bulk.BulkResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 @Component
 public class ElasticsearchTester {
     @Autowired
-    private ElasticsearchAPI elasticsearchAPI;
+    private ElasticsearchDocumentAPI elasticsearchDocumentAPI;
 
     public void add() throws IOException {
-        elasticsearchAPI.save(build());
+        elasticsearchDocumentAPI.save(build());
     }
 
     public void bulkAdd() throws IOException {
@@ -28,7 +24,7 @@ public class ElasticsearchTester {
         for (int i = 0; i < 100; i++) {
             elasticsearchList.add(build());
         }
-        elasticsearchAPI.save(elasticsearchList);
+        elasticsearchDocumentAPI.save(elasticsearchList);
     }
 
     private Elasticsearch build() throws IOException {
@@ -37,11 +33,16 @@ public class ElasticsearchTester {
         elasticsearch.setIndex("test");
         elasticsearch.setType("test");
         elasticsearch.setId(uuid);
+        Map<String,Object> map=new HashMap<>();
+        map.put("1",1);
+        map.put("2",2);
         elasticsearch.setSource(jsonBuilder()
                 .startObject()
-                .field("no", uuid)
-                .field("postDate", new Date())
-                .field("message", "trying out Elasticsearch")
+                .field("no", 1)
+                .field("createdTime", new Date())
+                .field("messageCD", "trying out Elasticsearch")
+                .field("list",Arrays.asList(123,123,123,312))
+                .field("map",map)
                 .endObject());
         return elasticsearch;
     }
